@@ -1,8 +1,8 @@
 export default function LifestyleGallery() {
   const images = Array.from({ length: 9 }).map((_, i) => ({
     id: i + 1,
-    image: `/placeholder.svg?height=300&width=300&query=fashion lifestyle ${i + 1}`,
-  }))
+    image: `/images/img${i + 1}.png`,
+  }));
 
   return (
     <section className="py-20 bg-gray-100">
@@ -17,11 +17,15 @@ export default function LifestyleGallery() {
               key={item.id}
               className="bg-gray-300 aspect-square rounded-lg overflow-hidden hover:opacity-80 transition"
             >
-              <img src={item.image || "/placeholder.svg"} alt="Lifestyle" className="w-full h-full object-cover" />
+              <img
+                src={item.image || "/placeholder.svg"}
+                alt="Lifestyle"
+                className="w-full h-full object-cover"
+              />
             </div>
           ))}
         </div>
       </div>
     </section>
-  )
+  );
 }

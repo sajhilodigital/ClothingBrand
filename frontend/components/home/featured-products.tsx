@@ -1,12 +1,12 @@
-import Link from "next/link"
-import { Heart, ShoppingBag } from "lucide-react"
+import Link from "next/link";
+import { Heart, ShoppingBag } from "lucide-react";
 
 const products = [
   {
     id: "1",
     name: "Trench Coat Long",
     price: 3000,
-    image: "/placeholder.svg?key=red-coat-1",
+    image: "/images/img9.png",
     rating: 5,
     sale: true,
   },
@@ -14,14 +14,14 @@ const products = [
     id: "2",
     name: "Trench Coat Long",
     price: 3000,
-    image: "/placeholder.svg?key=red-coat-2",
+    image: "/images/img9.png",
     rating: 5,
   },
   {
     id: "3",
     name: "Trench Coat Long",
     price: 3000,
-    image: "/placeholder.svg?key=red-coat-3",
+    image: "/images/img9.png",
     rating: 5,
     sale: true,
   },
@@ -29,14 +29,14 @@ const products = [
     id: "4",
     name: "Trench Coat Long",
     price: 3000,
-    image: "/placeholder.svg?key=red-coat-4",
+    image: "/images/img9.png",
     rating: 5,
   },
   {
     id: "5",
     name: "Trench Coat Long",
     price: 3000,
-    image: "/placeholder.svg?key=red-coat-5",
+    image: "/images/img9.png",
     rating: 5,
     sale: true,
   },
@@ -44,23 +44,31 @@ const products = [
     id: "6",
     name: "Trench Coat Long",
     price: 3000,
-    image: "/placeholder.svg?key=red-coat-6",
+    image: "/images/img9.png",
     rating: 5,
   },
-]
+];
 
 export default function FeaturedProducts() {
   return (
     <section className="py-20 bg-cream">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <span className="text-rust text-xs font-bold tracking-widest">NEW ARRIVALS</span>
-          <h2 className="text-4xl md:text-5xl font-serif text-dark mt-2">Latest Pieces</h2>
+          <span className="text-rust text-xs font-bold tracking-widest">
+            NEW ARRIVALS
+          </span>
+          <h2 className="text-4xl md:text-5xl font-serif text-dark mt-2">
+            Latest Pieces
+          </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
           {products.map((product) => (
-            <Link key={product.id} href={`/product/${product.id}`} className="group">
+            <Link
+              key={product.id}
+              href={`/product/${product.id}`}
+              className="group"
+            >
               <div className="relative bg-gray-300 mb-4 overflow-hidden aspect-square">
                 {product.sale && (
                   <div className="absolute top-4 right-4 bg-red-accent text-white px-3 py-1 text-xs font-bold z-10">
@@ -74,16 +82,24 @@ export default function FeaturedProducts() {
                 />
 
                 <div className="absolute bottom-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition duration-300">
-                  <button className="bg-white p-2 rounded hover:bg-cream transition" aria-label="Add to wishlist">
+                  <button
+                    className="bg-white p-2 rounded hover:bg-cream transition"
+                    aria-label="Add to wishlist"
+                  >
                     <Heart size={18} className="text-dark" />
                   </button>
-                  <button className="bg-white p-2 rounded hover:bg-cream transition" aria-label="Add to cart">
+                  <button
+                    className="bg-white p-2 rounded hover:bg-cream transition"
+                    aria-label="Add to cart"
+                  >
                     <ShoppingBag size={18} className="text-dark" />
                   </button>
                 </div>
               </div>
 
-              <h3 className="text-base font-light text-dark mb-2">{product.name}</h3>
+              <h3 className="text-base font-light text-dark mb-2">
+                {product.name}
+              </h3>
               <div className="flex items-center justify-between">
                 <p className="text-rust font-semibold">NPR {product.price}</p>
                 <div className="flex gap-1">
@@ -108,5 +124,5 @@ export default function FeaturedProducts() {
         </div>
       </div>
     </section>
-  )
+  );
 }

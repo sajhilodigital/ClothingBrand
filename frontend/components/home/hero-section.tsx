@@ -1,4 +1,4 @@
-import Link from "next/link"
+import Link from "next/link";
 
 export default function HeroSection() {
   return (
@@ -16,11 +16,14 @@ export default function HeroSection() {
             </h1>
 
             <p className="text-dark text-base md:text-lg leading-relaxed mb-8 max-w-xl text-gray-700">
-              Lorem ipsum dolor sit amet consectetur. Mollit id id tempus parturient sapien in oc eifeiend. Risus dictum
-              molestia id ornet donec elementum cros ornet velit. Pellentesque deneun vituplaud ipsum sed lectus ised.
-              Lao doner factus visa nemo sed lectus ised senseum. Sit sapien quique in lacus rulla. Tempor venenatis a
-              cursus vulputat id a neque. Viverra est natum at nec. Orci sed ultrices dictum maximus commoda elementum
-              ornare. Odio sodula vitro locus elemerttum of neoneon.
+              Lorem ipsum dolor sit amet consectetur. Mollit id id tempus
+              parturient sapien in oc eifeiend. Risus dictum molestia id ornet
+              donec elementum cros ornet velit. Pellentesque deneun vituplaud
+              ipsum sed lectus ised. Lao doner factus visa nemo sed lectus ised
+              senseum. Sit sapien quique in lacus rulla. Tempor venenatis a
+              cursus vulputat id a neque. Viverra est natum at nec. Orci sed
+              ultrices dictum maximus commoda elementum ornare. Odio sodula
+              vitro locus elemerttum of neoneon.
             </p>
 
             <Link
@@ -33,29 +36,19 @@ export default function HeroSection() {
 
           {/* Right Images */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-4">
-              <div className="bg-gray-300 h-72 overflow-hidden">
+            <div>
+              <div className=" h-72 overflow-hidden flex items-center justify-center">
                 <img
-                  src="/fashion-woman-portrait.jpg"
+                  src="/images/Hero1.png"
                   alt="Fashion model woman"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="bg-gray-300 h-48 overflow-hidden">
-                <img
-                  src="/white-shirt.png"
-                  alt="White shirt clothing"
-                  className="w-full h-full object-cover"
+                  className="w-full h-50 object-cover"
                 />
               </div>
             </div>
-            <div className="space-y-4 pt-8">
-              <div className="bg-gray-300 h-48 overflow-hidden">
-                <img src="/red-coat.jpg" alt="Red coat" className="w-full h-full object-cover" />
-              </div>
-              <div className="bg-gray-300 h-72 overflow-hidden">
+            <div className="pt-8 relative">
+              <div className="bg-gray-300 h-72 overflow-hidden absolute -left-8">
                 <img
-                  src="/fashion-woman-outfit.jpg"
+                  src="/images/Hero2.png"
                   alt="Fashion woman outfit"
                   className="w-full h-full object-cover"
                 />
@@ -65,5 +58,5 @@ export default function HeroSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }
