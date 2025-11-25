@@ -4,7 +4,8 @@ A modern, fully-responsive e-commerce platform built with Next.js 16 and React 1
 
 ## Project Structure
 
-\`\`\`
+```
+
 ├── app/
 │   ├── layout.tsx                 # Root layout with global providers
 │   ├── globals.css                # Global styles with design tokens
@@ -49,11 +50,13 @@ A modern, fully-responsive e-commerce platform built with Next.js 16 and React 1
 │
 └── public/
     └── images/                    # Product images and assets
-\`\`\`
+
+```
 
 ## Features
 
 ### Frontend
+
 - Responsive design (mobile-first)
 - Product browsing with filtering
 - Shopping cart with persistent storage
@@ -65,6 +68,7 @@ A modern, fully-responsive e-commerce platform built with Next.js 16 and React 1
 - Newsletter signup
 
 ### User Features
+
 - Browse products and collections
 - Filter by size, color, price
 - Add items to cart
@@ -86,6 +90,7 @@ A modern, fully-responsive e-commerce platform built with Next.js 16 and React 1
 Backend integration code is included as comments throughout the application. To enable backend functionality, uncomment and implement:
 
 ### 1. **Authentication** (`/app/profile/page.tsx`)
+
 \`\`\`javascript
 // POST /api/auth/login { email, password }
 // POST /api/auth/logout
@@ -93,11 +98,13 @@ Backend integration code is included as comments throughout the application. To 
 \`\`\`
 
 ### 2. **Products Search** (`/components/modals/search-overlay.tsx`)
+
 \`\`\`javascript
 // GET /api/products/search?q={query}
 \`\`\`
 
 ### 3. **Cart Management** (`/context/cart-context.tsx`)
+
 \`\`\`javascript
 // POST /api/cart/add
 // GET /api/cart
@@ -105,6 +112,7 @@ Backend integration code is included as comments throughout the application. To 
 \`\`\`
 
 ### 4. **Orders** (`/app/checkout/[step]/page.tsx`)
+
 \`\`\`javascript
 // POST /api/orders/create
 // GET /api/orders/{orderId}
@@ -112,11 +120,13 @@ Backend integration code is included as comments throughout the application. To 
 \`\`\`
 
 ### 5. **Newsletter** (`/components/home/newsletter-section.tsx`)
+
 \`\`\`javascript
 // POST /api/newsletter/subscribe { email }
 \`\`\`
 
 ### 6. **Checkout** (`/app/checkout/[step]/page.tsx`)
+
 \`\`\`javascript
 // POST /api/checkout/validate-promo
 // POST /api/checkout/place-order
@@ -125,6 +135,7 @@ Backend integration code is included as comments throughout the application. To 
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js 18+
 - npm or yarn
 
@@ -132,18 +143,19 @@ Backend integration code is included as comments throughout the application. To 
 
 1. Download or clone the project
 2. Install dependencies:
-\`\`\`bash
-npm install
-\`\`\`
+   \`\`\`bash
+   npm install
+   \`\`\`
 
 3. Run development server:
-\`\`\`bash
-npm run dev
-\`\`\`
+   \`\`\`bash
+   npm run dev
+   \`\`\`
 
 4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ### Building for Production
+
 \`\`\`bash
 npm run build
 npm start
@@ -180,15 +192,19 @@ npm start
 ## Data Model
 
 ### Product
+
 - id, name, price, image, rating, category, sizes, colors
 
 ### Cart Item
+
 - id, name, price, quantity, size, color, image
 
 ### Order
+
 - id, items, total, status, shippingAddress, paymentMethod, trackingId
 
 ### User
+
 - id, email, name, addresses, orders, wishlist
 
 ## Environment Variables
