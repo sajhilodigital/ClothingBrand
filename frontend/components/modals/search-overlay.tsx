@@ -1,50 +1,49 @@
-"use client"
+"use client";
 
-import { useEffect, useRef, useState } from "react"
-import { X } from "lucide-react"
+import { useEffect, useRef, useState } from "react";
+import { X, Search } from "lucide-react";
 
 interface SearchOverlayProps {
-  onClose: () => void
+  onClose: () => void;
 }
 
 export default function SearchOverlay({ onClose }: SearchOverlayProps) {
-  const inputRef = useRef<HTMLInputElement>(null)
-  const [query, setQuery] = useState("")
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
-    inputRef.current?.focus()
+    inputRef.current?.focus();
 
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose()
-    }
+      if (e.key === "Escape") onClose();
+    };
 
-    window.addEventListener("keydown", handleEscape)
-    return () => window.removeEventListener("keydown", handleEscape)
-  }, [onClose])
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
+  }, [onClose]);
 
   return (
     <div
-      className="fixed inset-0 bg-cream z-50"
+      className="fixed inset-0 bg-gray-light z-50 h-20 top-20"
       onClick={(e) => {
-        if (e.target === e.currentTarget) onClose()
+        if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-xl font-serif text-dark">Search Any Product</h1>
-          <button onClick={onClose} className="text-dark hover:text-rust transition" aria-label="Close search">
-            <X size={24} />
-          </button>
-        </div>
-
+      <div className="max-w-7xl mx-auto px-4! sm:px-6! lg:px-8! pt-8 text-sm">
         <div className="flex items-center gap-4">
+          <button
+            className="text-dark hover:text-rust transition"
+            aria-label="Search"
+          >
+            <Search size={16} />
+          </button>
           <input
             ref={inputRef}
             type="text"
             placeholder="Search Any Product"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="flex-1 border-b-2 border-gray-400 bg-cream py-3 text-dark placeholder-gray-600 focus:border-dark-green focus:outline-none transition text-lg"
+            className="flex-1 border-b-2 border-gray-400 py-3 text-dark placeholder-gray-600 focus:border-dark-green focus:outline-none transition"
             /* 
             // Backend Integration - Search products
             // onChange={(e) => {
@@ -57,7 +56,10 @@ export default function SearchOverlay({ onClose }: SearchOverlayProps) {
             // }}
             */
           />
-          <button onClick={onClose} className="text-dark hover:text-rust transition font-semibold text-sm">
+          <button
+            onClick={onClose}
+            className="text-dark hover:text-rust transition font-semibold text-sm"
+          >
             close
           </button>
         </div>
@@ -65,5 +67,5 @@ export default function SearchOverlay({ onClose }: SearchOverlayProps) {
         <div className="border-b border-gray-400 mt-6"></div>
       </div>
     </div>
-  )
+  );
 }
