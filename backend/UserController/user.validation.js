@@ -5,10 +5,10 @@ import * as yup from "yup";
 ------------------------------------------------------------------ */
 const addressSchema = yup.object({
   fullName: yup.string().trim().required("Full name is required"),
-  phone: yup
-    .string()
-    .matches(/^\+?[0-9]{7,15}$/, "Invalid phone number")
-    .required("Phone number is required"),
+  phone: {
+    type: String,
+    match: [/^\+?[0-9\s\-()]{7,20}$/, "Enter a valid phone number"],
+  },
   addressLine1: yup.string().trim().required("Address line 1 is required"),
   addressLine2: yup.string().trim().optional(),
   city: yup.string().trim().required("City is required"),
@@ -31,14 +31,13 @@ export const userRegisterSchema = yup.object({
 
   email: yup
     .string()
-    .trim()
-    .email("Invalid email format")
-    .required("Email is required"),
+    .required("Email is required")
+    .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Invalid email format"),
 
-  phone: yup
-    .string()
-    .matches(/^\+?[0-9]{7,15}$/, "Invalid phone number")
-    .required("Phone number is required"),
+  phone: {
+    type: String,
+    match: [/^\+?[0-9\s\-()]{7,20}$/, "Enter a valid phone number"],
+  },
 
   password: yup
     .string()
