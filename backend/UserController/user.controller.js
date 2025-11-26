@@ -30,10 +30,10 @@ const COOKIE_EXPIRY_MS = parseInt(
 // -----------------------------------------------------------------------
 router.post(
   "/register/request-otp",
-  // validateReqBody(userRegisterSchema),
+  validateReqBody(userRegisterSchema),
   async (req, res) => {
     try {
-      const { name, email, phone, password } = req.body;
+      const { name, email, phone, password, address } = req.body;
 
       const exists = await UserTable.findOne({ email });
       if (exists)
@@ -137,11 +137,11 @@ router.post("/login", validateReqBody(loginSchema), async (req, res) => {
         .status(401)
         .json({ success: false, message: "Invalid credentials." });
 
-    if (!user.emailVerified)
-      return res.status(403).json({
-        success: false,
-        message: "Please verify your email first.",
-      });
+    // if (!user.emailVerified)
+    //   return res.status(403).json({
+    //     success: false,
+    //     message: "Please verify your email first.",
+    //   });
 
     const valid = await bcrypt.compare(password, user.password);
     if (!valid)
