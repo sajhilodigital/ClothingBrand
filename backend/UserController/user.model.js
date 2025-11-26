@@ -4,7 +4,16 @@ import mongoose from "mongoose";
 const addressSchema = new mongoose.Schema(
   {
     fullName: { type: String, required: true },
-    phone: { type: String, required: true },
+    phone: {
+      type: String,
+      required: true,
+      validate: {
+        validator: function (v) {
+          return /^\+?[0-9\s\-()]{7,20}$/.test(v);
+        },
+        message: "Enter a valid phone number",
+      },
+    },
     addressLine1: { type: String, required: true },
     addressLine2: { type: String },
     city: { type: String, required: true },
@@ -41,7 +50,13 @@ const userSchema = new mongoose.Schema(
 
     phone: {
       type: String,
-      match: [/^\+?[0-9]{7,15}$/, "Enter a valid phone number"],
+      required: true,
+      validate: {
+        validator: function (v) {
+          return /^\+?[0-9\s\-()]{7,20}$/.test(v);
+        },
+        message: "Enter a valid phone number",
+      },
     },
 
     password: { type: String, required: true, minlength: 8 },
