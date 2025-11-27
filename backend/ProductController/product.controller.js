@@ -6,29 +6,112 @@ import {
 } from "../utils/cloudinaryUpload.js";
 
 import { ProductTable } from "./product.model.js";
-import { updateProductSchema } from "./product.validation.js";
+import { productSchema, updateProductSchema } from "./product.validation.js";
 
-// CREATE PRODUCT
-export const createProduct = async (req, res) => {
-    try {
-      const sellerId = req.loggedInUserId;
-      const newProduct = req.body;
+//CREATE PRODUCT
 
-      await ProductTable.create({ ...newProduct, createdBy: sellerId });
+export const generateSlug = async (name) => {
+  let base = name
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w\-]+/g, "");
 
-      res.status(201).json({
-        message: "Product is added successfully.",
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({
-        message: "Failed to create product",
-        error: error.message,
-      });
-    }
-  
+  let slug = base;
+  let counter = 1;
+
+  while (await ProductTable.findOne({ slug })) {
+    slug = `${base}-${counter}`;
+    counter++;
+  }
+
+  return slug;
 };
 
+// export const createProduct = async (req, res) => {
+//     try {
+//       const newProduct = req.body;
+
+//       await ProductTable.create({ ...newProduct});
+
+//       res.status(201).json({
+//         message: "Product is added successfully.",
+//       });
+//     } catch (error) {
+//       console.error(error);
+//       res.status(500).json({
+//         message: "Failed to create product",
+//         error: error.message,
+//       });
+//     }
+  
+// };
+
+export const createProduct = async (req, res) => {
+  try {
+
+    if (!req.body)
+      return res.status(400).json({ message: "Missing 'data' field" });
+
+    // Parse JSON
+    let productData = req.body;
+
+    console.log(productData)
+
+    // Auto slug
+    productData.slug = await generateSlug(productData.name);
+
+    // Validate data
+    await productSchema.validate(productData, { abortEarly: false });
+
+    const files = req.files || [];
+
+    // Upload images
+    const imageFiles = files.filter((f) => f.fieldname === "images");
+    const thumbnailFile = files.find((f) => f.fieldname === "thumbnail");
+
+    if (imageFiles.length) {
+      const uploadedImages = await Promise.all(
+        imageFiles.map((f) => uploadBufferToCloudinary(f.buffer, "products"))
+      );
+      productData.images = uploadedImages.map((i) => i.secure_url);
+    }
+
+    if (thumbnailFile) {
+      const thumb = await uploadBufferToCloudinary(
+        thumbnailFile.buffer,
+        "products"
+      );
+      productData.thumbnail = thumb.secure_url;
+    }
+
+    // Save to DB
+    const product = await ProductTable.create({
+      ...productData,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Product created successfully",
+      product,
+    });
+  } catch (err) {
+    console.error(err);
+
+    if (err.name === "ValidationError") {
+      return res.status(400).json({
+        success: false,
+        message: "Validation failed",
+        errors: err.errors,
+      });
+    }
+
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
 // UPDATE PRODUCT
 export const updateProduct = async (req, res) => {
   try {

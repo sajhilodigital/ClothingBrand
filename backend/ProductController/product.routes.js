@@ -13,7 +13,17 @@ router.get("/special/:type", getSpecialProducts);
 router.get("/collection/:slug", getProductsByCollection);
 router.get("/:slug", getProductBySlug);
 
-router.post("/create-product", validateReqBody(productSchema) , createProduct);
+router.post(
+  "/create-product",
+  
+  
+  validateReqBody(productSchema),
+  upload.fields([
+    { name: "images", maxCount: 10 },
+    { name: "thumbnail", maxCount: 1 },
+  ]),
+  createProduct
+);
 router.put("/update-product/:id", isAdmin, upload.array("images", 10), updateProduct);
 router.delete("/delete-product/:id", isAdmin, deleteProduct);
 

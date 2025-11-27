@@ -117,8 +117,6 @@ const productSchema = new Schema(
   { timestamps: true, minimize: false }
 );
 
-productSchema.index({ slug: 1 });
-productSchema.index({ isActive: 1 });
 productSchema.index({ category: 1 });
 productSchema.index({ price: 1 });
 productSchema.index({ brand: 1 });
