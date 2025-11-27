@@ -1,152 +1,120 @@
-// validators/productValidator.js
-import Yup from "yup";
+import  Yup from "yup";
 
-
-// Variant Schema
-const variantSchema = Yup.object({
+/* ------------------ Variants Validation ------------------ */
+export const variantSchema = Yup.object({
   variantId: Yup.string().required("Variant ID is required"),
+  title: Yup.string().required("Variant title is required"),
   sku: Yup.string().nullable(),
   barcode: Yup.string().nullable(),
-  title: Yup.string().nullable(),
-  options: Yup.array().of(
-    Yup.object({
-      name: Yup.string().required(),
-      value: Yup.string().required(),
-    })
-  ),
-  price: Yup.number().required("Price is required"),
-  compareAtPrice: Yup.number().nullable(),
-  stock: Yup.number().default(0),
-  reservedStock: Yup.number().default(0),
-  safetyStock: Yup.number().default(0),
-  weight: Yup.number().default(0),
-  height: Yup.number().nullable(),
-  width: Yup.number().nullable(),
-  depth: Yup.number().nullable(),
-  images: Yup.array().of(Yup.string()),
+  price: Yup
+    .number()
+    .typeError("Variant price must be a number")
+    .required("Variant price is required"),
+  compareAtPrice: Yup
+    .number()
+    .typeError("Variant compare price must be a number")
+    .nullable(),
+  stock: Yup
+    .number()
+    .typeError("Variant stock must be a number")
+    .min(0, "Stock cannot be negative")
+    .default(0),
+  reservedStock: Yup
+    .number()
+    .typeError("Reserved stock must be a number")
+    .min(0, "Reserved stock cannot be negative")
+    .default(0),
+  weight: Yup
+    .number()
+    .typeError("Variant weight must be a number")
+    .min(0, "Weight cannot be negative")
+    .default(0),
+  images: Yup.array().of(Yup.string()).default([]),
   thumbnail: Yup.string().nullable(),
-  isActive: Yup.boolean().default(true),
 });
 
-// Specifications
-const attributeSchema = Yup.object({
-  key: Yup.string().required(),
-  value: Yup.string().required(),
-});
-
-// Ratings Schema
-const ratingSchema = Yup.object({
-  average: Yup.number().default(0),
-  totalReviews: Yup.number().default(0),
-  ratingBreakdown: Yup.object({
-    1: Yup.number().default(0),
-    2: Yup.number().default(0),
-    3: Yup.number().default(0),
-    4: Yup.number().default(0),
-    5: Yup.number().default(0),
-  }),
-});
-
-// Gallery Schema
-const gallerySchema = Yup.object({
-  type: Yup.string().oneOf(["image", "video"]).default("image"),
-  url: Yup.string().url().required("Gallery URL is required"),
-});
-
-// Discount Schema
-const discountSchema = Yup.object({
-  type: Yup.string().oneOf(["FLAT", "PERCENT", null]).nullable(),
-  value: Yup.number().nullable(),
-  startDate: Yup.date().nullable(),
-  endDate: Yup.date().nullable(),
-});
-
-// Main Product Schema
+/* ------------------ Product Validation ------------------ */
 export const productSchema = Yup.object({
+  /* ------------- BASIC DETAILS ------------- */
   name: Yup.string().required("Product name is required").trim(),
-  slug: Yup.string().required("Slug is required"),
-  handle: Yup.string().nullable(),
-  sku: Yup.string().nullable(),
-  barcode: Yup.string().nullable(),
-  type: Yup.string().nullable(),
-  vendor: Yup.string().nullable(),
-  brand: Yup.string().nullable(),
-  description: Yup.string().nullable(),
-  shortDescription: Yup.string().nullable(),
-  careInstructions: Yup.array().of(Yup.string()),
-  specifications: Yup.array().of(attributeSchema),
 
   category: Yup.string().required("Category is required"),
+
   subCategory: Yup.string().nullable(),
-  collection: Yup.string().nullable(),
 
-  tags: Yup.array().of(Yup.string()),
-  images: Yup.array().of(Yup.string()),
-  thumbnail: Yup.string().nullable(),
+  price: Yup
+    .number()
+    .typeError("Price must be a number")
+    .required("Product price is required"),
 
-  gallery: Yup.array().of(gallerySchema),
-  videoUrl: Yup.string().nullable(),
+  compareAtPrice: Yup
+    .number()
+    .typeError("Compare at price must be a number")
+    .nullable(),
 
-  price: Yup.number().required("Price is required"),
-  compareAtPrice: Yup.number(),
+  description: Yup.string().required("Product description is required"),
 
-  discount: discountSchema,
+  shortDescription: Yup
+    .string()
+    .required("Short description is required")
+    .max(250, "Short description cannot exceed 250 characters"),
 
-  taxRate: Yup.number().nullable(),
-  isTaxIncluded: Yup.boolean().default(false),
+  /* ------------- ARRAYS ------------- */
+  tags: Yup.array().of(Yup.string()).default([]),
 
-  totalStock: Yup.number().default(0),
-  reservedStock: Yup.number().default(0),
-  safetyStock: Yup.number().default(2),
+  careInstructions: Yup.array().of(Yup.string()).default([]),
 
-  variants: Yup.array().of(variantSchema),
+  /* ------------- SPECIFICATIONS ------------- */
+  specifications: Yup
+    .array()
+    .of(
+      Yup.object({
+        key: Yup.string().required("Specification key is required"),
+        value: Yup.string().required("Specification value is required"),
+      })
+    )
+    .default([]),
 
-  options: Yup.array().of(
-    Yup.object({
-      name: Yup.string().required(),
-      values: Yup.array().of(Yup.string().required()),
-    })
-  ),
+  /* ------------- IMAGES ------------- */
+  images: Yup
+    .array()
+    .of(Yup.string())
+    .required("At least 1 product image is required")
+    .min(1, "At least 1 product image is required"),
 
-  shippingClass: Yup.string()
-    .oneOf(["STANDARD", "EXPRESS", "HEAVY", "FREE", "NONE"])
-    .default("STANDARD"),
+  thumbnail: Yup.string().required("Thumbnail image is required"),
 
-  weight: Yup.number().nullable(),
-  height: Yup.number().nullable(),
-  width: Yup.number().nullable(),
-  depth: Yup.number().nullable(),
-  isShippable: Yup.boolean().default(true),
+  /* ------------- VARIANTS ------------- */
+  variants: Yup.array().of(variantSchema).default([]),
 
-  ratings: ratingSchema,
+  /* ------------- BRAND / VENDOR / TYPE ------------- */
+  brand: Yup.string().nullable(),
+  vendor: Yup.string().nullable(),
+  type: Yup.string().nullable(),
 
-  isActive: Yup.boolean().default(true),
-  isFeatured: Yup.boolean().default(false),
-  isNewArrival: Yup.boolean().default(false),
-  isBestSeller: Yup.boolean().default(false),
-  isLimitedStock: Yup.boolean().default(false),
-  isHidden: Yup.boolean().default(false),
-
+  /* ------------- SEO FIELDS ------------- */
   metaTitle: Yup.string().nullable(),
-  metaDescription: Yup.string().nullable(),
-  metaKeywords: Yup.array().of(Yup.string()),
-  searchKeywords: Yup.array().of(Yup.string()),
 
-  totalSales: Yup.number().default(0),
-  totalViews: Yup.number().default(0),
-  wishlistedCount: Yup.number().default(0),
-  conversionRate: Yup.number().default(0),
+  metaDescription: Yup.string().nullable(),
+
+  metaKeywords: Yup.array().of(Yup.string()).default([]),
 });
 
-
-export const updateProductSchema = createProductSchema
+export const updateProductSchema = productSchema
   .clone()
   .shape({
-    removeImageIds: yup.array().of(yup.string()).nullable(),
-    imageOrder: yup.array().of(yup.string()).nullable(),
+    removeImageIds: Yup.array().of(Yup.string()).nullable(),
+    imageOrder: Yup.array().of(Yup.string()).nullable(),
   })
   .noUnknown(true)
   .test("at-least-one-field", "No data to update", (value) => {
     return Object.keys(value).length > 0;
   });
+
+export const paginationSchema = Yup.object({
+  page: Yup.number().default(1).integer().min(1),
+  limit: Yup.number().default(1).integer().min(1),
+});
+
+
 
