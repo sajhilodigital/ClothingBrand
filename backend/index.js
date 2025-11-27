@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import express from "express";
 import connectDB from "./Config/DBconnection.js";
 import { userController } from "./UserController/user.controller.js";
+import { productRoutes } from "./ProductController/product.routes.js";
 
 
 // Load env variables
@@ -107,6 +108,7 @@ app.get("/", (req, res) => {
 
 // Prefix all user routes
 app.use("/api/auth", userController);
+app.use("/api/products", productRoutes);
 
 // app.use(er);
 
