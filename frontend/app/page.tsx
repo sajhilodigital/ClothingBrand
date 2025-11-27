@@ -6,13 +6,15 @@ import LifestyleGallery from "@/components/home/lifestyle-gallery";
 import NewsletterSection from "@/components/home/newsletter-section";
 import PromoCarousel from "@/components/home/Promo";
 import BigImage from "@/components/home/BigImage";
+import CollectionSection from "@/components/home/collection-section";
 
 export default function Home() {
   return (
     <main>
       <HeroSection />
+      <CollectionSection />
       <FeaturedProducts />
-      {/* <PromoCarousel /> */}
+      <PromoCarousel />
       {/* <ServicesSection /> */}
       {/* <Testimonials /> */}
       <BigImage />

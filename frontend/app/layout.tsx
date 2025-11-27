@@ -1,23 +1,23 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Playfair_Display } from "next/font/google"
-import "./globals.css"
-import Header from "@/components/layout/header"
-import Footer from "@/components/layout/footer"
-import { CartProvider } from "@/context/cart-context"
+import type React from "react";
+import type { Metadata } from "next";
+import { Playfair_Display } from "next/font/google";
+import "./globals.css";
+import Header from "@/components/layout/header";
+import Footer from "@/components/layout/footer";
+import { CartProvider } from "@/context/cart-context";
 
-const playfair = Playfair_Display({ subsets: ["latin"] })
+const playfair = Playfair_Display({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "The Shop - Premium Clothing",
   description: "Discover premium clothing collections crafted with purpose",
-    generator: 'v0.app'
-}
+  generator: "Sajilo Digital : Your Imagination , Our Creation",
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
@@ -29,5 +29,5 @@ export default function RootLayout({
         </CartProvider>
       </body>
     </html>
-  )
+  );
 }
