@@ -108,7 +108,7 @@ app.get("/", (req, res) => {
 
 // Prefix all user routes
 app.use("/api/auth", userController);
-app.use("/api/products", productRoutes);
+app.use("/api/product", productRoutes);
 
 // app.use(er);
 

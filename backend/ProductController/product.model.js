@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { type } from "os";
 const { Schema } = mongoose;
 
 const variantSchema = new Schema(
@@ -50,9 +51,7 @@ const productSchema = new Schema(
     barcode: String,
     type: String,
     vendor: String,
-    brand: { type: Schema.Types.ObjectId, ref: "Brand" },
-    description: String,
-    shortDescription: String,
+    brand: { type: String},
     careInstructions: [String],
     specifications: [attributeSchema],
     category: { type: Schema.Types.ObjectId, ref: "Category", required: true },

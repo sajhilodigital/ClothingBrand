@@ -1,5 +1,4 @@
 // controllers/productController.js
-import { Collection } from "../CollectionController/collection.model.js";
 import {
   deleteFromCloudinary,
   uploadBufferToCloudinary,
@@ -49,14 +48,40 @@ export const generateSlug = async (name) => {
 
 export const createProduct = async (req, res) => {
   try {
-
     if (!req.body)
       return res.status(400).json({ message: "Missing 'data' field" });
 
     // Parse JSON
     let productData = req.body;
 
-    console.log(productData)
+    // Trim strings to avoid false mismatches
+    const nameTrimmed = productData.name?.trim();
+    const descriptionTrimmed = productData.description
+      ? productData.description.trim()
+      : "";
+
+    // Auto-generate slug if not provided
+    if (!productData.slug) {
+      productData.slug = await generateSlug(nameTrimmed);
+    }
+
+    // 1️⃣ Check if a product already exists with same details
+    const existingProduct = await ProductTable.findOne({
+      name: nameTrimmed,
+      category: productData.category,
+      price: productData.price,
+      description: descriptionTrimmed,
+    });
+
+    if (existingProduct) {
+      return res.status(409).json({
+        success: false,
+        message:
+          "Product already exists with the same name, category, price, description",
+      });
+    }
+
+    console.log(productData);
 
     // Auto slug
     productData.slug = await generateSlug(productData.name);
@@ -207,174 +232,183 @@ export const deleteProduct = async (req, res) => {
       );
     }
 
-    await Product.findByIdAndDelete(req.params.id);
+    await ProductTable.findByIdAndDelete(req.params.id);
     res.json({ success: true, message: "Product deleted permanently" });
   } catch (error) {
     res.status(500).json({ success: false, message: "Delete failed" });
   }
 };
 
-// GET ALL + SEARCH + FILTER + PAGINATION + FACETS
-export const getProducts = async (req, res) => {
-  try {
-    const page = Math.max(1, parseInt(req.query.page) || 1);
-    const limit = Math.min(50, parseInt(req.query.limit) || 12);
-    const skip = (page - 1) * limit;
-
-    const {
-      search,
-      category,
-      collection,
-      minPrice,
-      maxPrice,
-      size,
-      color,
-      tag,
-      sort = "newest",
-    } = req.query;
-
-    const filter = { isActive: true };
-
-    if (search?.trim()) {
-      const r = { $regex: search.trim(), $options: "i" };
-      filter.$or = [{ name: r }, { shortDescription: r }, { tags: r }];
-    }
-    if (category && category !== "all") filter.category = category;
-    if (collection && collection !== "all") filter.collection = collection;
-    if (tag && tag !== "all") filter.tags = tag.toUpperCase();
-    if (minPrice || maxPrice) {
-      filter.price = {
-        ...(minPrice && { $gte: Number(minPrice) }),
-        ...(maxPrice && { $lte: Number(maxPrice) }),
-      };
-    }
-    if (size || color) {
-      filter.variants = { $elemMatch: {} };
-      if (size) filter.variants.$elemMatch.size = size.toUpperCase();
-      if (color)
-        filter.variants.$elemMatch.color = { $regex: color, $options: "i" };
-    }
-
-    let sortBy = { createdAt: -1 };
-    if (sort === "price_low") sortBy = { price: 1 };
-    if (sort === "price_high") sortBy = { price: -1 };
-    if (sort === "name") sortBy = { name: 1 };
-
-    const [products, total, facets] = await Promise.all([
-      Product.find(filter)
-        .populate("category", "name slug")
-        .populate("collection", "name")
-        .sort(sortBy)
-        .skip(skip)
-        .limit(limit)
-        .lean(),
-      ProductTable.countDocuments(filter),
-      ProductTable.aggregate([
-        { $match: filter },
-        {
-          $facet: {
-            sizes: [
-              { $unwind: "$variants" },
-              { $group: { _id: "$variants.size", count: { $sum: 1 } } },
-            ],
-            colors: [
-              { $unwind: "$variants" },
-              { $group: { _id: "$variants.color", count: { $sum: 1 } } },
-            ],
-            priceRange: [
-              {
-                $group: {
-                  _id: null,
-                  min: { $min: "$price" },
-                  max: { $max: "$price" },
-                },
-              },
-            ],
-          },
-        },
-      ]),
-    ]);
-
-    res.json({
-      success: true,
-      data: {
-        products,
-        pagination: {
-          page,
-          pages: Math.ceil(total / limit),
-          total,
-          hasNext: page < Math.ceil(total / limit),
-        },
-        filters: {
-          sizes: facets[0].sizes.map((s) => s._id).filter(Boolean),
-          colors: facets[0].colors.map((c) => c._id).filter(Boolean),
-          priceRange: facets[0].priceRange[0] || { min: 0, max: 100000 },
-        },
-      },
-    });
-  } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .json({ success: false, message: "Failed to load products" });
-  }
-};
-
-// GET SINGLE PRODUCT
 export const getProductBySlug = async (req, res) => {
   try {
-    const product = await ProductTable.findOne({
-      slug: req.params.slug,
-      isActive: true,
-    })
-      .populate("category", "name slug")
-      .populate("collection", "name banner");
+    const { slug } = req.params;
 
-    if (!product)
-      return res
-        .status(404)
-        .json({ success: false, message: "Product not found" });
+    if (!slug)
+      return res.status(400).json({
+        success: false,
+        message: "Slug is required",
+      });
 
-    res.json({ success: true, data: product });
+    const product = await ProductTable.findOne({ slug });
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      product,
+    });
   } catch (error) {
+    console.error("Error fetching product by slug:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
+
+// -------------------- LIST PRODUCTS BY BUYER --------------------
+
+  export const getAllProductByPagination =  async (req, res) => {
+  try {
+    const { page, limit } = req.body;
+    const skip = (page - 1) * limit;
+
+    const products = await ProductTable.aggregate([
+      { $match: { isDeleted: false, isActive: true } },
+      { $skip: skip },
+      { $limit: limit },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          slug: 1,
+          sku: 1,
+          type: 1,
+          vendor: 1,
+          brand: 1,
+          description: 1,
+          shortDescription: 1,
+          careInstructions: 1,
+          specifications: 1,
+          category: 1,
+          collection: 1,
+          tags: 1,
+          images: 1,
+          thumbnail: 1,
+          price: 1,
+          compareAtPrice: 1,
+          discount: 1,
+          isTaxIncluded: 1,
+          totalStock: 1,
+          reservedStock: 1,
+          safetyStock: 1,
+          variants: 1,
+          shippingClass: 1,
+          weight: 1,
+          height: 1,
+          width: 1,
+          depth: 1,
+          isShippable: 1,
+          isActive: 1,
+          isFeatured: 1,
+          isNewArrival: 1,
+          isBestSeller: 1,
+          isLimitedStock: 1,
+          isHidden: 1,
+          metaKeywords: 1,
+          searchKeywords: 1,
+          totalSales: 1,
+          totalViews: 1,
+          wishlistedCount: 1,
+          conversionRate: 1,
+          gallery: 1,
+          options: 1,
+          createdAt: 1,
+          updatedAt: 1,
+          // version: 1,
+        },
+      },
+    ]);
+
+    const totalItems = await ProductTable.countDocuments({ isDeleted: false, isActive: true });
+    const totalPage = Math.ceil(totalItems / limit);
+
+    return res.status(200).json({ message: "success", productList: products, totalPage });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+
+
+ export const liveSearchProducts = async (req, res) => {
+  try {
+    const { search } = req.body;
+
+    if (!search || search.trim() === "") {
+      return res
+        .status(400)
+        .json({ success: false, message: "Search query is required" });
+    }
+
+    // Create a regex that matches anywhere in the field, case-insensitive
+    const regex = new RegExp(search.trim(), "i");
+
+    const products = await ProductTable.aggregate([
+      // Lookup brand details to allow searching by brand name
+      {
+        $lookup: {
+          from: "brands",
+          localField: "brand",
+          foreignField: "_id",
+          as: "brandDetails",
+        },
+      },
+      {
+        $unwind: { path: "$brandDetails", preserveNullAndEmptyArrays: true },
+      },
+      // Match any field with the search regex
+      {
+        $match: {
+          isDeleted: false,
+          isActive: true,
+          $or: [
+            { name: { $regex: regex } },
+            { description: { $regex: regex } },
+            { shortDescription: { $regex: regex } },
+            { "brandDetails.name": { $regex: regex } },
+            { "variants.title": { $regex: regex } }, // optional: search variant titles
+          ],
+        },
+      },
+      // Project only necessary fields for faster response
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          slug: 1,
+          price: 1,
+          thumbnail: 1,
+          brand: "$brandDetails.name",
+          variants: 1,
+        },
+      },
+      { $limit: 20 }, // Optional: limit results for performance
+    ]);
+
+    return res.status(200).json({
+      success: true,
+      count: products.length,
+      products,
+    });
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ success: false, message: "Server error" });
   }
-};
-
-// SPECIAL SECTIONS
-export const getSpecialProducts = async (req, res) => {
-  const { type } = req.params;
-  const limit = parseInt(req.query.limit) || 12;
-
-  const tagMap = { featured: "FEATURED", new: "NEW", bestseller: "BESTSELLER" };
-  const tag = tagMap[type];
-
-  if (!tag)
-    return res.status(400).json({ success: false, message: "Invalid type" });
-
-  const products = await ProductTable.find({ isActive: true, tags: tag })
-    .sort({ createdAt: -1 })
-    .limit(limit)
-    .lean();
-
-  res.json({ success: true, data: products });
-};
-
-// COLLECTION PAGE
-export const getProductsByCollection = async (req, res) => {
-  try {
-    const coll = await Collection.findOne({ slug: req.params.slug });
-    if (!coll)
-      return res
-        .status(404)
-        .json({ success: false, message: "Collection not found" });
-
-    const products = await ProductTable.find({
-      collection: coll._id,
-      isActive: true,
-    }).sort({ createdAt: -1 });
-    res.json({ success: true, data: { collection: coll, products } });
-  } catch (error) {
-    res.status(500).json({ success: false, message: "Failed" });
-  }
-};
+  };

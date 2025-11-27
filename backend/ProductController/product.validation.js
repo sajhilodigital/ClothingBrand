@@ -110,3 +110,11 @@ export const updateProductSchema = productSchema
   .test("at-least-one-field", "No data to update", (value) => {
     return Object.keys(value).length > 0;
   });
+
+export const paginationSchema = Yup.object({
+  page: Yup.number().default(1).integer().min(1),
+  limit: Yup.number().default(1).integer().min(1),
+});
+
+
+
