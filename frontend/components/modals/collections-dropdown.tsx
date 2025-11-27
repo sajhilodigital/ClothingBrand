@@ -55,8 +55,8 @@ export default function CollectionsDropdown() {
       </button>
 
       {isOpen && (
-        <div className="w-200 absolute top-full -left-80 mt-2! bg-white rounded-sm shadow-xl border border-gray-300 p-6! z-50">
-          <div className="grid grid-cols-4 gap-8">
+        <div className="w-screen max-w-200 absolute top-full md:-left-80 lg:-left-80 mt-2! bg-white rounded-sm shadow-xl border border-gray-300 p-6! z-50">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-1">
             {collections.map((collection) => (
               <div key={collection.name}>
                 <Link
