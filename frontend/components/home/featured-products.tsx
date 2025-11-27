@@ -52,26 +52,26 @@ const products = [
 export default function FeaturedProducts() {
   return (
     <section className="py-10! bg-white px-4!">
-      <div className="max-w-7xl mx-auto px-4 sm:px-10 lg:px-12">
-        <div className="text-center mb-16">
+      <div className="max-w-7xl mx-auto! px-4 sm:px-10! lg:px-12!">
+        <div className="text-center mb-16!">
           <span className="text-rust text-xs font-bold tracking-widest">
             NEW ARRIVALS
           </span>
-          <h2 className="text-4xl md:text-5xl font-serif text-dark mt-2">
+          <h2 className="text-4xl! md:text-5xl! font-serif text-dark mt-2!">
             Latest Pieces
           </h2>
         </div>
 
-        <div className="w-full mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
+        <div className="w-full mx-auto! grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12!">
           {products.map((product) => (
             <Link
               key={product.id}
               href={`/product/${product.id}`}
               className="group"
             >
-              <div className="relative bg-gray-300 mb-4 overflow-hidden aspect-square">
+              <div className="relative bg-gray-300 mb-4! overflow-hidden aspect-square">
                 {product.sale && (
-                  <div className="absolute top-4 right-4 bg-red-accent text-white px-3 py-1 text-xs font-bold z-10">
+                  <div className="absolute top-4 right-4 bg-red-accent text-white px-3! py-1! text-xs! font-bold! z-10">
                     SALE
                   </div>
                 )}
@@ -83,7 +83,7 @@ export default function FeaturedProducts() {
               </div>
 
               <div className="flex justify-between">
-                <h3 className=" font-light text-dark mb-2 text-md!">
+                <h3 className=" font-light! text-dark mb-2! text-md!">
                   {product.name}
                 </h3>
               </div>
@@ -91,13 +91,13 @@ export default function FeaturedProducts() {
                 <p className="text-rust font-semibold">NPR {product.price}</p>
                 <div className="flex gap-2 pr-5!">
                   <button
-                    className="cursor-pointer p-2 rounded hover:text-red-600 text-dark transition"
+                    className="cursor-pointer p-2! rounded hover:text-red-600 text-dark transition"
                     aria-label="Add to wishlist"
                   >
                     <Heart size={22} />
                   </button>
                   <button
-                    className="cursor-pointer p-2 rounded hover:text-blue-400 text-dark transition"
+                    className="cursor-pointer p-2! rounded hover:text-blue-400 text-dark transition"
                     aria-label="Add to cart"
                   >
                     <ShoppingBag size={22} />
@@ -111,7 +111,7 @@ export default function FeaturedProducts() {
         <div className="text-center">
           <Link
             href="/collections/summer"
-            className="inline-block border-2 border-gray-400 px-8 py-3 text-dark font-semibold text-sm tracking-wide hover:border-rust hover:text-rust transition"
+            className="inline-block border-2 border-gray-400 px-8! py-3! text-dark font-semibold text-sm! tracking-wide hover:border-rust hover:text-rust transition"
           >
             LOAD MORE
           </Link>

@@ -17,7 +17,7 @@ export default function LifestyleGallery() {
 
   return (
     <section className="py-20! px-4!">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto! px-4! sm:px-6! lg:px-8!">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* First Column */}
           <div className="flex flex-col gap-6">
@@ -52,7 +52,7 @@ export default function LifestyleGallery() {
             </div>
 
             {/* Branding Block */}
-            <div className="bg-dark-green text-white flex flex-col items-center justify-center rounded-lg p-6 text-center h-[250px] ">
+            <div className="bg-dark-green text-white flex flex-col items-center justify-center rounded-lg p-6! text-center h-[250px] ">
               <img src="/logo.png" alt="Logo" height={200} width={200} />
               <div className="flex gap-4 justify-center mt-4!">
                 <Link href="#" aria-label="Instagram">

@@ -2,16 +2,16 @@ import Link from "next/link";
 
 export default function HeroSection() {
   return (
-    <section className="bg-cream pt-12! pb-12! px-10!">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="bg-cream pt-12! pb-12! px-10! h-[80vh]">
+      <div className="max-w-7xl mx-auto! px-4! sm:px-6! lg:px-8!">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
           <div className="flex flex-col gap-10">
-            <div className="text-green-600 px-4 py-2 inline-block mb-8 w-fit text-sm font-bold tracking-wider">
+            <div className="text-green-600 px-4! py-2! inline-block mb-8! w-fit text-sm! font-bold! tracking-wider">
               AUTUMN/WINTER 2025
             </div>
 
-            <p className="text-dark text-base md:text-lg leading-relaxed mb-8 max-w-x">
+            <p className="text-dark text-base! md:text-lg! leading-relaxed mb-8! max-w-x">
               Lorem ipsum dolor sit amet consectetur. Mollit id id tempus
               parturient sapien in oc eifeiend. Risus dictum molestia id ornet
             </p>
@@ -25,7 +25,7 @@ export default function HeroSection() {
           </div>
 
           {/* Right Images */}
-          <div className="grid grid-cols-2 gap-5">
+          <div className=" grid grid-cols-2 gap-5">
             <div>
               <div className=" h-72 overflow-hidden flex items-center justify-center">
                 <img
