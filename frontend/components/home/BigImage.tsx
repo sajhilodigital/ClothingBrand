@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export default function BigImage() {
   return (
-    <section className="relative w-full h-[500px] sm:h-[400px] md:h-[500px] lg:h-[600px] mt-5!">
+    <section className="relative w-full max-w-7xl mx-auto! h-[500px] sm:h-[400px] md:h-[500px] lg:h-[600px] mt-5!">
       {/* Background Image */}
       <Image
         src="/images/img8.png"

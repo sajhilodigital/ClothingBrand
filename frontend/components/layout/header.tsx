@@ -13,10 +13,10 @@ export default function Header() {
   return (
     <>
       <header className="sticky top-0 z-40 bg-gray-light border-black border-b">
-        <div className="max-w-7xl mx-auto px-6! sm:px-8! lg:px-12!">
+        <div className="max-w-7xl mx-auto! px-6! sm:px-8! lg:px-12!">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
-            <Link href="/" className="text-3xl font-bold text-rust font-serif">
+            <Link href="/" className="text-3xl font-bold text-rust! font-serif">
               <img src="/logo.png" alt="Logo" className="h-full w-30" />
             </Link>
 
@@ -25,13 +25,13 @@ export default function Header() {
               <CollectionsDropdown />
               <Link
                 href="/about"
-                className="text-sm font-semibold text-dark hover:text-rust transition"
+                className="text-sm! font-semibold! text-dark! hover:text-rust! transition"
               >
                 ABOUT
               </Link>
               <Link
                 href="/shop"
-                className="text-sm font-semibold text-dark hover:text-rust transition"
+                className="text-sm! font-semibold! text-dark! hover:text-rust! transition"
               >
                 SHOP
               </Link>
@@ -42,7 +42,7 @@ export default function Header() {
               {/* Search Button */}
               <button
                 onClick={() => setShowSearch(true)}
-                className="text-dark hover:text-rust transition"
+                className="text-dark! hover:text-rust! transition cursor-pointer"
                 aria-label="Search"
               >
                 <Search size={24} />
@@ -81,13 +81,13 @@ export default function Header() {
               <CollectionsDropdown />
               <Link
                 href="/about"
-                className="block py-2 text-sm font-semibold text-dark"
+                className="block py-2! text-sm! font-semibold! text-dark!"
               >
                 ABOUT
               </Link>
               <Link
                 href="/shop"
-                className="block py-2 text-sm font-semibold text-dark"
+                className="block py-2! text-sm! font-semibold! text-dark!"
               >
                 SHOP
               </Link>

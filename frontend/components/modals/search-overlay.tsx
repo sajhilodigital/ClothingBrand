@@ -29,10 +29,10 @@ export default function SearchOverlay({ onClose }: SearchOverlayProps) {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="max-w-7xl mx-auto px-4! sm:px-6! lg:px-8! pt-8 text-sm">
+      <div className="max-w-7xl mx-auto! px-4! sm:px-6! lg:px-8! pt-8! text-sm!">
         <div className="flex items-center gap-4">
           <button
-            className="text-dark hover:text-rust transition"
+            className="text-dark! hover:text-rust transition"
             aria-label="Search"
           >
             <Search size={16} />
@@ -43,7 +43,7 @@ export default function SearchOverlay({ onClose }: SearchOverlayProps) {
             placeholder="Search Any Product"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="flex-1 border-b-2 border-gray-400 py-3 text-dark placeholder-gray-600 focus:border-dark-green focus:outline-none transition"
+            className="flex-1 border-b-2 border-gray-400 py-3! text-dark placeholder-gray-600 focus:border-dark-green focus:outline-none transition"
             /* 
             // Backend Integration - Search products
             // onChange={(e) => {
@@ -58,13 +58,13 @@ export default function SearchOverlay({ onClose }: SearchOverlayProps) {
           />
           <button
             onClick={onClose}
-            className="text-dark hover:text-rust transition font-semibold text-sm"
+            className="text-dark hover:text-rust transition font-semibold! text-sm"
           >
             close
           </button>
         </div>
 
-        <div className="border-b border-gray-400 mt-6"></div>
+        <div className="border-b border-gray-400 mt-6!"></div>
       </div>
     </div>
   );
