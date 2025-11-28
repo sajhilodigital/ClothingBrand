@@ -81,7 +81,6 @@ export const createProduct = async (req, res) => {
       });
     }
 
-    console.log(productData);
 
     // Auto slug
     productData.slug = await generateSlug(productData.name);

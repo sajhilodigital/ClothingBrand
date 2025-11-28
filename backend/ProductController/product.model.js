@@ -98,7 +98,7 @@ const productSchema = new Schema(
     isNewArrival: { type: Boolean, default: false },
     isBestSeller: { type: Boolean, default: false },
     isLimitedStock: { type: Boolean, default: false },
-    isHidden: { type: Boolean, default: false },
+    isOnSell: { type: Boolean, default: false },
     metaTitle: String,
     metaDescription: String,
     metaKeywords: [String],
