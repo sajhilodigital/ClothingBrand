@@ -117,34 +117,27 @@ export default function ShopPage() {
                     <img
                       src={product.image || "/placeholder.svg"}
                       alt={product.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                      className="w-full h-full object-cover hover:scale-105 transition duration-300"
                     />
-                    <div className="absolute bottom-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition">
-                      <button
-                        title="Like"
-                        className="bg-white p-2! rounded-lg hover:bg-orange-50"
-                      >
-                        <Heart size={20} />
-                      </button>
-                      <button
-                        title="Buy"
-                        className="bg-white p-2! rounded-lg hover:bg-orange-50"
-                      >
-                        <ShoppingBag size={20} />
-                      </button>
-                    </div>
                   </div>
                   <h3 className="text-lg! font-light! mb-2!">{product.name}</h3>
                   <div className="flex items-center justify-between">
                     <p className="text-orange-500 font-bold!">
                       NPR {product.price}
                     </p>
-                    <div className="flex gap-1">
-                      {Array.from({ length: product.rating }).map((_, i) => (
-                        <span key={i} className="text-orange-500">
-                          ★
-                        </span>
-                      ))}
+                    <div className="flex gap-2 transition">
+                      <button
+                        title="Like"
+                        className="p-2! rounded-lg hover:text-red-600! transition duration-200 cursor-pointer"
+                      >
+                        <Heart size={20} />
+                      </button>
+                      <button
+                        title="Buy"
+                        className="p-2! rounded-lg hover:text-blue-600! transition duration-200 cursor-pointer"
+                      >
+                        <ShoppingBag size={20} />
+                      </button>
                     </div>
                   </div>
                 </Link>
